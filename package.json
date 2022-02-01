@@ -1,5 +1,5 @@
 {
-  "name": "etna_chat",
+  "name": "chat",
   "version": "1.0.0",
   "description": "A simple chat server.",
   "main": "index.js",
