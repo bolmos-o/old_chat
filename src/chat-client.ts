@@ -1,5 +1,5 @@
-const io = require("socket.io-client");
-const socket = io("ws://localhost:3000");
+const ioClient = require("socket.io-client");
+const socket = ioClient("ws://localhost:3000");
 const readline = require('readline');
 const { argv, stdin: input, stdout: output } = require('process');
 
@@ -9,7 +9,7 @@ if (!argv[2])
 	process.exit(1);
 }
 
-user = argv[2];
+const user = argv[2];
 const rl = readline.createInterface({ input, output, prompt: "me> " });
 
 socket.on("connect", () => {
