@@ -2,11 +2,18 @@
 
 const e = React.createElement;
 
-function appendMessage(message)
+function appendMessage(message, own)
 {
 	let item = document.createElement('li');
+	if (own === true)
+		item.setAttribute("class", "user");
+
+	// let user = document.createElement('span');
+		// li.setAttribute("class", "username");
+	// user.textContent = "huhu";
+	// item.appendChild(user);
 	item.textContent = message;
-	messages.appendChild(item);
+	chat_messages.appendChild(item);
 }
 
 class chat extends React.Component {
@@ -28,40 +35,42 @@ class chat extends React.Component {
 		if (this.state.input)
 		{
 			this.setState({username: this.state.input, input: ''})
-		 	socket.emit("message", this.state.input + " is now online.");
+		 	socket.emit('set username', this.state.input);
 		}
 	}
 
 	chatSubmit(e) {
 		e.preventDefault();
-		if (this.state.input)
-		{
-			let msg = this.state.username + ": " + this.state.input;
-			appendMessage(msg);
-			socket.emit('message', msg);
-			this.setState({input: ''});
-		}
+		appendMessage(this.state.username + "\n" + this.state.input, true);
+		socket.emit('message', this.state.input);
+		this.setState({input: ''});
 	}
 
 	render() {
 		if (this.state.username)
 		{
 			return e(
-				'div', null,
-				e('ul', {id: "messages"}),
+				'div', {id: "chat_page"},
+				e('ul', {id: "chat_messages"}),
 				e('form',
-					{action: "", id: "chat_input", onSubmit: this.chatSubmit},
-					e('input', {value: this.state.input, onChange: this.inputChange}),
+					{action: "", onSubmit: this.chatSubmit},
+					e('input',	{id: "chat_input", required: "text", 
+								maxlength: "256", value: this.state.input,
+								onChange: this.inputChange}),
 					e('button',	null,"Send")));
 		}
 		else
 		{
 			return e(
-				'div', null,
-				e('h4', null, "Choose a username: "),
+				'div', {id: "welcome_page"},
+				e('h4', null, "Welcome to the chat."),
 				e('form', { id: "username_form", onSubmit: this.usernameSubmit},
-					e('input', {value: this.state.input, onChange: this.inputChange}),
-					e('button', null, "Submit"))
+					e('p', null, "Choose a username: "),
+					e('input', {required: "text", maxlength: "16", 
+								value: this.state.input, 
+								onChange: this.inputChange}),
+					e('button', null, "Enter")
+				)
 			);
 		}
 	}
@@ -69,6 +78,13 @@ class chat extends React.Component {
 
 const socket = io();
 
-socket.on("message", (msg) => appendMessage(msg));
+socket.on("message", (message) => 
+{
+	const obj = JSON.parse(message);
+	if (obj.username)
+		appendMessage(obj.username + "\n" + obj.content, false);
+	else
+		appendMessage(obj.content, false);
+});
 
 ReactDOM.render(e(chat), document.getElementById('chat'));

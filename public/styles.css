@@ -1,11 +1,52 @@
+body
+{
+	font-family: 'IBM Plex Sans Thai Looped', sans-serif;
+}
+
 ul
 {
 	list-style: none;
 	padding: 0;
+	white-space: pre-line;
+}
+
+li
+{
+	line-height: 1.2;
+	margin: 1.5em;
+}
+
+input
+{
+	margin-right: 1em;
+}
+
+.user
+{
+	text-align: right;
+}
+
+#welcome_page
+{
+	position: absolute;
+	left: 40%;
+}
+
+#chat_page
+{
+	position: absolute;
+	left: 30%;
+}
+
+#chat_messages
+{
+	height: 80vh;
+	width: 60vw;
+	overflow-y: auto;
+	overflow-wrap: break-word;
 }
 
 #chat_input
 {
-	position: absolute;
-	bottom: 0px;
+	width: 40vw;
 }

@@ -10,27 +10,25 @@ if (!argv[2])
 }
 
 const user = argv[2];
-const rl = readline.createInterface({ input, output, prompt: "me> " });
+const rl = readline.createInterface({ input, output, prompt: "me > " });
 
 socket.on("connect", () => {
-	socket.emit("message", user + " is now online.");
+	socket.emit("set username", user);
 
 	rl.prompt();
-	rl.on('line', (input) => {
-		socket.emit("message", user + ": " + input);
+	rl.on('line', (input: string) => {
+		socket.emit("message", input);
 		rl.prompt();
 	});
 
-	socket.on("message", (msg) => {
-		console.log(msg);
-	});
-
-	socket.on("disconnect", () => {
-		socket.emit("message", user + " is now offline.");
+	socket.on("message", (message: string) => {
+		const obj = JSON.parse(message);
+		if (obj.username)
+			console.log(obj.username + ": " + obj.content);
+		else
+			console.log(obj.content);
 	});
 });
-
-
 
 socket.on("connect_error", () => {
 	console.log("Impossible to connect to the server.");

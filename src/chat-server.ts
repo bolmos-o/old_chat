@@ -13,10 +13,26 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-	socket.on('message', (msg) => {
-		console.log(msg);
-		socket.broadcast.emit('message', msg);
+	socket.on('message', (message: string) => {
+		console.log(socket.username + ': ' + message);
+		socket.broadcast.emit('message', JSON.stringify({ username: socket.username, content: message }));
+	});
+	socket.on('set username', (username: string) => {
+		socket.username = username;
+		socket.broadcast.emit('message', JSON.stringify({ username: "", content: username + ' has entered the room.' }));
+		console.log(username + ' has entered the room.');
+	});
+	socket.on('disconnect', () => {
+		if (socket.username)
+		{
+			io.emit('message', JSON.stringify({ user: "", content: socket.username + ' has left the room.' }));
+			console.log(socket.username + ' has left the room.');
+		}
+		else
+		{
+			io.emit('message', JSON.stringify({ user: "", content: 'Anonymous has left the room.' }));
+			console.log('Anonymous has left the room.');
+		}
 	});
 });
-
 server.listen(port, () => console.log(`listen on ${port}`));
