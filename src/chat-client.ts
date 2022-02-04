@@ -17,7 +17,8 @@ socket.on("connect", () => {
 
 	rl.prompt();
 	rl.on('line', (input: string) => {
-		socket.emit("message", input);
+		if (input)
+			socket.emit("message", input);
 		rl.prompt();
 	});
 

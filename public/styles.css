@@ -21,9 +21,21 @@ input
 	margin-right: 1em;
 }
 
-.user
+.user-message
 {
 	text-align: right;
+}
+
+.user-name
+{
+	font-weight: bold;
+	color: red;
+}
+
+.other-name
+{
+	font-weight: bold;
+	color: blue;
 }
 
 #welcome_page
@@ -34,19 +46,21 @@ input
 
 #chat_page
 {
-	position: absolute;
-	left: 30%;
+	max-width: 500px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 #chat_messages
 {
+	max-width: 420px;
 	height: 80vh;
-	width: 60vw;
 	overflow-y: auto;
 	overflow-wrap: break-word;
+	margin-bottom: 2em;
 }
 
 #chat_input
 {
-	width: 40vw;
+	width: 350px;
 }
